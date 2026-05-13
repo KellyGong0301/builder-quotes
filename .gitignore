@@ -19,3 +19,6 @@ node_modules/
 
 # Screenshots from dev
 screenshot-*.png
+
+# Build artifacts
+dist/
