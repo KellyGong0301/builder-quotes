@@ -611,7 +611,6 @@
   <div class="meta br controls">
     <button id="prev" title="Previous (←)">←&nbsp;Prev</button>
     <button id="rand" title="Shuffle (R or Space)">Shuffle</button>
-    <button id="today" title="Today (T)">Today</button>
     <button id="next" title="Next (→)">Next&nbsp;→</button>
   </div>
 </main>
@@ -758,11 +757,6 @@
       render(currentIdx);
     }
 
-    function today() {
-      currentIdx = dayOfYear() % POSTERS.length;
-      render(currentIdx);
-    }
-
     // ─── Summary modal ───
     const modal = $('#summary-modal');
     let lastFocus = null;
@@ -826,7 +820,6 @@
       if (e.key === 'ArrowLeft') nav(-1);
       else if (e.key === 'ArrowRight') nav(1);
       else if (e.key === 'r' || e.key === 'R') shuffle();
-      else if (e.key === 't' || e.key === 'T') today();
       else if (e.key === ' ') { e.preventDefault(); shuffle(); }
       else if (e.key === 's' || e.key === 'S') openSummary();
     });
@@ -834,7 +827,6 @@
     $('#prev').addEventListener('click', () => nav(-1));
     $('#next').addEventListener('click', () => nav(1));
     $('#rand').addEventListener('click', shuffle);
-    $('#today').addEventListener('click', today);
 
     $('#date').textContent = formatDate();
     render(currentIdx);

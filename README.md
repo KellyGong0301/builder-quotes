@@ -34,7 +34,6 @@ Just open `index.html` in your browser. Bookmark it. Done.
 |---|---|
 | `←` / `→` | Previous / Next quote |
 | `R` or `Space` | Random quote |
-| `T` | Today's quote |
 | `S` | Open the summary modal |
 | `ESC` | Close summary |
 
