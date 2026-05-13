@@ -109,7 +109,8 @@ if (typeof POSTERS_DATA === 'undefined' || !Array.isArray(POSTERS_DATA) || POSTE
   try { onboarded = localStorage.getItem(ONBOARD_KEY) === '1'; } catch (e) {}
 
   function renderWelcome() {
-    const palette = PALETTES[0]; // signature navy + cream + orange
+    // Light, fresh palette for first impression — cream + forest + brick.
+    const palette = { bg: "#ede4d0", fg: "#2d4a3e", accent: "#a8473a" };
     const r = document.documentElement.style;
     r.setProperty('--bg', palette.bg);
     r.setProperty('--fg', palette.fg);
@@ -117,7 +118,7 @@ if (typeof POSTERS_DATA === 'undefined' || !Array.isArray(POSTERS_DATA) || POSTE
 
     $('#tl-sep').innerHTML = '&nbsp;·&nbsp;';
     $('#poster-num').textContent = 'Welcome';
-    $('#tr-meta').textContent = 'From Kelly';
+    // tr-meta keeps "From Lenny's Podcast" (no name attribution)
 
     const msg = "From now on, every new tab is one builder quote. Hit → to read today's.";
     const words = msg.split(' ');
@@ -135,7 +136,7 @@ if (typeof POSTERS_DATA === 'undefined' || !Array.isArray(POSTERS_DATA) || POSTE
       if (i < words.length - 1) quoteEl.appendChild(document.createTextNode(' '));
     });
 
-    $('#guest').textContent = 'Kelly, the maker';
+    $('#guest').style.display = 'none';
     $('#role').textContent = '365 quotes · one per day';
     $('#read').style.display = 'none';
 
@@ -152,7 +153,7 @@ if (typeof POSTERS_DATA === 'undefined' || !Array.isArray(POSTERS_DATA) || POSTE
     onboarded = true;
     try { localStorage.setItem(ONBOARD_KEY, '1'); } catch (e) {}
     $('#tl-sep').innerHTML = '&nbsp; № ';
-    $('#tr-meta').textContent = "From Lenny's Podcast";
+    $('#guest').style.display = '';
     $('#read').style.display = '';
     render(currentIdx); // show today, no increment
     return true;
