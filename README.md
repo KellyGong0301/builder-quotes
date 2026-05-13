@@ -28,6 +28,15 @@ Each poster has the quote in big type, the speaker's name and role, and a "Read 
 
 Just open `index.html` in your browser. Bookmark it. Done.
 
+## Hide the Chrome footer (one-time, recommended)
+
+Chrome 138+ adds a small "Customize Chrome" bar at the bottom of every extension-overridden new tab — it cannot be suppressed by extension code. To hide it for good in your Chrome profile:
+
+- Right-click the bar → **Hide footer on New Tab page**
+- Or open Customize Chrome → toggle off **Show footer on New Tab page**
+
+This is a per-profile Chrome setting, persistent. Every new-tab extension (Momentum, Daily Builder Quotes, etc.) is subject to the same Chrome behavior.
+
 ## Keyboard shortcuts
 
 | Key | Action |
