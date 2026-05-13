@@ -291,6 +291,12 @@
     outline-offset: 3px;
   }
 
+  .controls button[disabled] {
+    opacity: 0.25;
+    cursor: not-allowed;
+    pointer-events: none;
+  }
+
   /* ─── Summary modal ─── */
   .modal {
     position: fixed;
@@ -649,9 +655,8 @@
     <span id="date">—</span>
   </div>
   <div class="meta br controls">
-    <button id="prev" title="Previous (←)">←&nbsp;Prev</button>
-    <button id="rand" title="Shuffle (R or Space)">Shuffle</button>
-    <button id="next" title="Next (→)">Next&nbsp;→</button>
+    <button id="prev" title="Previous (←) — go back through what you've seen" disabled>←&nbsp;Prev</button>
+    <button id="next" title="Next (→ / R / Space) — random new quote">Next&nbsp;→</button>
   </div>
 </main>
 

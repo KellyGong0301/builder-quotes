@@ -159,19 +159,33 @@ if (typeof POSTERS_DATA === 'undefined' || !Array.isArray(POSTERS_DATA) || POSTE
     return true;
   }
 
-  function nav(delta) {
-    if (leaveWelcome()) return;
-    currentIdx = (currentIdx + delta + POSTERS.length) % POSTERS.length;
-    render(currentIdx);
+  // Session-only navigation history. Starts with today; grows on "next",
+  // shrinks on "prev".
+  const viewHistory = [currentIdx];
+
+  function updatePrevButton() {
+    const prev = $('#prev');
+    prev.disabled = viewHistory.length <= 1;
   }
 
-  function shuffle() {
+  function next() {
     if (leaveWelcome()) return;
     let idx;
     do { idx = Math.floor(Math.random() * POSTERS.length); }
     while (idx === currentIdx && POSTERS.length > 1);
     currentIdx = idx;
+    viewHistory.push(idx);
     render(currentIdx);
+    updatePrevButton();
+  }
+
+  function prev() {
+    if (leaveWelcome()) return;
+    if (viewHistory.length <= 1) return;
+    viewHistory.pop();
+    currentIdx = viewHistory[viewHistory.length - 1];
+    render(currentIdx);
+    updatePrevButton();
   }
 
   // ─── Summary modal ───
@@ -234,16 +248,14 @@ if (typeof POSTERS_DATA === 'undefined' || !Array.isArray(POSTERS_DATA) || POSTE
       if (e.key === 'Escape') closeSummary();
       return; // swallow other keys while modal is open
     }
-    if (e.key === 'ArrowLeft') nav(-1);
-    else if (e.key === 'ArrowRight') nav(1);
-    else if (e.key === 'r' || e.key === 'R') shuffle();
-    else if (e.key === ' ') { e.preventDefault(); shuffle(); }
+    if (e.key === 'ArrowLeft') prev();
+    else if (e.key === 'ArrowRight' || e.key === 'r' || e.key === 'R') next();
+    else if (e.key === ' ') { e.preventDefault(); next(); }
     else if (e.key === 's' || e.key === 'S') { if (!onboarded) return; openSummary(); }
   });
 
-  $('#prev').addEventListener('click', () => nav(-1));
-  $('#next').addEventListener('click', () => nav(1));
-  $('#rand').addEventListener('click', shuffle);
+  $('#prev').addEventListener('click', prev);
+  $('#next').addEventListener('click', next);
 
   $('#date').textContent = formatDate();
   if (onboarded) {
