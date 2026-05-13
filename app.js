@@ -100,7 +100,7 @@ if (typeof POSTERS_DATA === 'undefined' || !Array.isArray(POSTERS_DATA) || POSTE
     void attr.offsetWidth;
     attr.style.animation = '';
 
-    document.title = `${p.quote}  —  Daily / Builder Quotes`;
+    document.title = 'New Tab';
   }
 
   function nav(delta) {
