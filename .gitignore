@@ -1,0 +1,21 @@
+# Source data — Lenny's Podcast transcripts (25MB, original work belongs to Lenny Rachitsky)
+transcripts/
+
+# Intermediate batch outputs
+batches/
+candidates.json
+candidates-pool.json
+new-265.json
+all-episodes.txt
+
+# Build scripts (internal)
+scripts/
+
+# OS / editor noise
+.DS_Store
+*.swp
+*.swo
+node_modules/
+
+# Screenshots from dev
+screenshot-*.png

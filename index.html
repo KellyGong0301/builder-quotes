@@ -1,0 +1,845 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Daily / Builder Quotes — from Lenny's Podcast</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #1a2332;
+    --fg: #f4ede0;
+    --accent: #ff6b3d;
+    --t: 0.9s cubic-bezier(0.65, 0, 0.35, 1);
+  }
+
+  *,*::before,*::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html, body {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    background: var(--bg);
+    color: var(--fg);
+    transition: background var(--t), color var(--t);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  body {
+    font-family: 'Bricolage Grotesque', system-ui, sans-serif;
+  }
+
+  /* Grain overlay */
+  .noise {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    opacity: 0.075;
+    mix-blend-mode: overlay;
+    z-index: 100;
+  }
+
+  .poster {
+    position: relative;
+    width: 100%;
+    height: 100vh;
+    padding: clamp(1.25rem, 3vw, 2.75rem);
+    display: grid;
+    grid-template-rows: auto 1fr auto;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+  }
+
+  /* Thin inset frame */
+  .poster::before {
+    content: "";
+    position: absolute;
+    inset: clamp(0.85rem, 2vw, 1.85rem);
+    border: 1px solid currentColor;
+    opacity: 0.12;
+    pointer-events: none;
+    transition: opacity var(--t);
+  }
+
+  .meta {
+    font-family: 'JetBrains Mono', ui-monospace, monospace;
+    font-size: clamp(0.6rem, 0.78vw, 0.74rem);
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    font-weight: 500;
+    opacity: 0.65;
+    transition: opacity var(--t);
+  }
+
+  .meta .accent-dot {
+    display: inline-block;
+    width: 6px;
+    height: 6px;
+    background: var(--accent);
+    border-radius: 50%;
+    vertical-align: middle;
+    margin: 0 0.55em 0.15em 0;
+    transition: background var(--t);
+  }
+
+  .tl { grid-row: 1; grid-column: 1; align-self: start; }
+  .tr { grid-row: 1; grid-column: 2; justify-self: end; align-self: start; }
+  .bl { grid-row: 3; grid-column: 1; align-self: end; }
+  .br { grid-row: 3; grid-column: 2; justify-self: end; align-self: end; }
+
+  .content {
+    grid-row: 2;
+    grid-column: 1 / -1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    position: relative;
+    min-height: 0;
+  }
+
+  .quote {
+    font-family: 'Bricolage Grotesque', sans-serif;
+    font-weight: 700;
+    letter-spacing: -0.04em;
+    font-variation-settings: "wght" 720, "opsz" 96;
+    max-width: min(94%, 1700px);
+    padding-left: clamp(0.5rem, 2vw, 1.5rem);
+  }
+
+  /* Font-size auto-scaling buckets, based on word count */
+  .quote[data-bucket="xs"] {
+    font-size: clamp(2.75rem, 11vw, 11.5rem);
+    line-height: 0.9;
+  }
+  .quote[data-bucket="sm"] {
+    font-size: clamp(2.5rem, 8.6vw, 9rem);
+    line-height: 0.92;
+  }
+  .quote[data-bucket="md"] {
+    font-size: clamp(2rem, 6.4vw, 6.8rem);
+    line-height: 0.98;
+    letter-spacing: -0.03em;
+  }
+  .quote[data-bucket="lg"] {
+    font-size: clamp(1.5rem, 4.7vw, 5rem);
+    line-height: 1.02;
+    letter-spacing: -0.02em;
+    font-variation-settings: "wght" 680, "opsz" 96;
+  }
+
+  .word {
+    display: inline-block;
+    opacity: 0;
+    transform: translateY(28px);
+    animation: rise 0.85s cubic-bezier(0.2, 0.65, 0.3, 1) forwards;
+    will-change: transform, opacity;
+  }
+
+  @keyframes rise {
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* Attribution block — appears below the quote */
+  .attribution {
+    margin-top: clamp(1.5rem, 3.5vh, 2.6rem);
+    padding-left: clamp(0.5rem, 2vw, 1.5rem);
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+    max-width: min(94%, 900px);
+    opacity: 0;
+    transform: translateY(12px);
+    animation: rise 0.7s cubic-bezier(0.2, 0.65, 0.3, 1) forwards;
+    animation-delay: var(--attr-delay, 1.2s);
+  }
+
+  .attribution .guest {
+    font-family: 'Bricolage Grotesque', sans-serif;
+    font-size: clamp(0.95rem, 1.45vw, 1.5rem);
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    font-variation-settings: "wght" 600, "opsz" 24;
+    line-height: 1.1;
+  }
+
+  .attribution .guest::before {
+    content: "—";
+    opacity: 0.45;
+    margin-right: 0.4em;
+    font-weight: 400;
+  }
+
+  .attribution .role {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: clamp(0.58rem, 0.74vw, 0.72rem);
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    opacity: 0.55;
+    font-weight: 500;
+    padding-left: 1.3em;
+    transition: opacity 0.3s ease;
+  }
+
+  .attribution .read:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 4px;
+  }
+
+  /* "Read summary" — short accent-colored stroke that rhymes with the em-dash above */
+  .attribution .read {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: clamp(0.58rem, 0.74vw, 0.72rem);
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    opacity: 0.55;
+    font-weight: 500;
+    padding-left: 1.3em;
+    color: inherit;
+    background: none;
+    border: 0;
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-block;
+    position: relative;
+    margin-top: 0.2rem;
+    width: fit-content;
+    transition: opacity 0.25s ease;
+  }
+  .attribution .read::before {
+    content: "";
+    position: absolute;
+    left: 0.1em;
+    top: 50%;
+    width: 0;
+    height: 0;
+    border-left: 7px solid var(--accent);
+    border-top: 4px solid transparent;
+    border-bottom: 4px solid transparent;
+    transform: translateY(-50%);
+    transition: border-left-color var(--t);
+  }
+  .attribution .read:hover { opacity: 1; }
+
+  /* Accent dot, floating */
+  .dot {
+    position: absolute;
+    bottom: 8%;
+    right: 7%;
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    background: var(--accent);
+    opacity: 0.92;
+    animation: pulse 3.6s ease-in-out infinite;
+    transition: background var(--t);
+    pointer-events: none;
+  }
+
+  @keyframes pulse {
+    0%, 100% { transform: scale(1); opacity: 0.85; }
+    50% { transform: scale(1.22); opacity: 1; }
+  }
+
+  /* Tick mark */
+  .tick {
+    position: absolute;
+    top: 8%;
+    right: 9%;
+    width: 1px;
+    height: clamp(40px, 6vw, 72px);
+    background: currentColor;
+    opacity: 0.25;
+    transform: rotate(20deg);
+    transform-origin: top center;
+    transition: opacity var(--t);
+    pointer-events: none;
+  }
+
+  .controls {
+    display: inline-flex;
+    gap: 0.4rem;
+    align-items: center;
+  }
+
+  .controls button {
+    background: transparent;
+    border: 1px solid currentColor;
+    color: inherit;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: clamp(0.55rem, 0.7vw, 0.68rem);
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    font-weight: 500;
+    padding: 0.42rem 0.7rem;
+    cursor: pointer;
+    opacity: 0.55;
+    transition: opacity 0.25s ease, background 0.25s ease, color 0.25s ease, border-color 0.25s ease;
+  }
+
+  .controls button:hover {
+    opacity: 1;
+    background: var(--fg);
+    color: var(--bg);
+    border-color: var(--fg);
+  }
+
+  .controls button:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 3px;
+  }
+
+  /* ─── Summary modal ─── */
+  .modal {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.55);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    padding: clamp(1rem, 3vw, 2.5rem);
+    opacity: 0;
+    transition: opacity 0.35s ease;
+  }
+  .modal.open {
+    display: flex;
+    opacity: 1;
+  }
+
+  .modal-panel {
+    position: relative;
+    background: var(--bg);
+    color: var(--fg);
+    width: 100%;
+    max-width: 760px;
+    max-height: 90vh;
+    overflow-y: auto;
+    padding: clamp(1.75rem, 4.5vw, 3.5rem) clamp(1.75rem, 4.5vw, 3.75rem);
+    border: 1px solid currentColor;
+    transform: translateY(16px) scale(0.985);
+    transition: transform 0.4s cubic-bezier(0.2, 0.65, 0.3, 1);
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+  }
+  .modal.open .modal-panel { transform: translateY(0) scale(1); }
+
+  .modal-panel::-webkit-scrollbar { width: 6px; }
+  .modal-panel::-webkit-scrollbar-thumb {
+    background: currentColor;
+    opacity: 0.2;
+  }
+
+  .modal-close {
+    position: absolute;
+    top: clamp(0.85rem, 1.6vw, 1.4rem);
+    right: clamp(0.85rem, 1.6vw, 1.4rem);
+    background: transparent;
+    border: 1px solid currentColor;
+    color: inherit;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    cursor: pointer;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.9rem;
+    line-height: 1;
+    opacity: 0.6;
+    transition: opacity 0.25s ease, background 0.25s ease, color 0.25s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .modal-close:hover {
+    opacity: 1;
+    background: var(--fg);
+    color: var(--bg);
+  }
+
+  .modal-tag {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: clamp(0.6rem, 0.75vw, 0.72rem);
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    opacity: 0.5;
+    font-weight: 500;
+    margin-bottom: 1.2rem;
+    display: flex;
+    align-items: center;
+    gap: 0.6em;
+  }
+  .modal-tag::before {
+    content: "";
+    display: inline-block;
+    width: 22px;
+    height: 1px;
+    background: var(--accent);
+  }
+
+  /* Episode title — small, dim, at the very bottom for context */
+  .modal-eptitle {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: clamp(0.55rem, 0.7vw, 0.66rem);
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    opacity: 0.4;
+    margin-bottom: clamp(1.6rem, 3vw, 2.4rem);
+    line-height: 1.4;
+  }
+
+  /* The quote itself — large, with quote-mark feel */
+  .modal-quote {
+    font-family: 'Bricolage Grotesque', sans-serif;
+    font-size: clamp(1.5rem, 2.6vw, 2.35rem);
+    font-weight: 700;
+    line-height: 1.12;
+    letter-spacing: -0.022em;
+    margin-bottom: 0.9rem;
+    font-variation-settings: "wght" 700, "opsz" 48;
+    position: relative;
+    padding-left: 0.95em;
+  }
+  .modal-quote::before {
+    content: "\201C";       /* left double quotation mark */
+    position: absolute;
+    left: -0.05em;
+    top: -0.15em;
+    font-size: 1.6em;
+    line-height: 1;
+    color: var(--accent);
+    font-weight: 500;
+    opacity: 0.9;
+  }
+
+  .modal-attr {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 0.4em 0.85em;
+    padding-left: 0.95em;
+    margin-bottom: clamp(1.8rem, 3.5vw, 2.6rem);
+  }
+  .modal-guest {
+    font-family: 'Bricolage Grotesque', sans-serif;
+    font-size: clamp(0.95rem, 1.15vw, 1.1rem);
+    font-weight: 600;
+    letter-spacing: -0.005em;
+    font-variation-settings: "wght" 600, "opsz" 20;
+  }
+  .modal-guest::before {
+    content: "— ";
+    opacity: 0.45;
+    margin-right: 0.15em;
+    font-weight: 400;
+  }
+  .modal-role {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: clamp(0.58rem, 0.72vw, 0.68rem);
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    opacity: 0.55;
+  }
+
+  /* Plain-English unpacking paragraph */
+  .modal-meaning {
+    font-family: 'Bricolage Grotesque', sans-serif;
+    font-size: clamp(1rem, 1.25vw, 1.2rem);
+    line-height: 1.55;
+    letter-spacing: -0.005em;
+    margin-bottom: clamp(1.8rem, 3.5vw, 2.6rem);
+    font-variation-settings: "wght" 450, "opsz" 24;
+  }
+
+  .modal-section-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: clamp(0.58rem, 0.74vw, 0.7rem);
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    opacity: 0.45;
+    font-weight: 500;
+    margin-bottom: 0.75rem;
+  }
+
+  .modal-points {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 clamp(1.6rem, 3vw, 2.4rem) 0;
+    font-family: 'Bricolage Grotesque', sans-serif;
+  }
+  .modal-points li {
+    font-size: clamp(0.95rem, 1.15vw, 1.1rem);
+    line-height: 1.45;
+    padding: 0.5rem 0 0.5rem 1.5em;
+    position: relative;
+    border-bottom: 1px solid currentColor;
+    border-bottom-color: rgba(128, 128, 128, 0.15);
+  }
+  .modal-points li:last-child { border-bottom: 0; }
+  .modal-points li::before {
+    content: "";
+    position: absolute;
+    left: 0.25em;
+    top: 1em;
+    width: 0.6em;
+    height: 1px;
+    background: var(--accent);
+  }
+
+  .modal-takeaway {
+    border-left: 3px solid var(--accent);
+    padding: 0.6rem 0 0.6rem 1rem;
+    margin-bottom: clamp(1.5rem, 3vw, 2.2rem);
+    font-family: 'Bricolage Grotesque', sans-serif;
+    font-size: clamp(1.05rem, 1.4vw, 1.35rem);
+    font-style: italic;
+    line-height: 1.35;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    font-variation-settings: "wght" 600, "opsz" 24;
+  }
+
+  .modal-watch {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6em;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: clamp(0.6rem, 0.78vw, 0.74rem);
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    font-weight: 500;
+    padding: 0.65rem 1rem;
+    border: 1px solid currentColor;
+    color: inherit;
+    text-decoration: none;
+    transition: background 0.25s ease, color 0.25s ease, gap 0.25s ease;
+  }
+  .modal-watch::before {
+    content: "";
+    width: 0;
+    height: 0;
+    border-left: 7px solid var(--accent);
+    border-top: 4px solid transparent;
+    border-bottom: 4px solid transparent;
+    transition: border-left-color 0.25s ease;
+  }
+  .modal-watch:hover {
+    background: var(--fg);
+    color: var(--bg);
+    gap: 0.9em;
+  }
+  .modal-watch:hover::before {
+    border-left-color: var(--bg);
+  }
+
+  @media (max-width: 720px) {
+    .modal-quote { font-size: 1.55rem; }
+    .modal-meaning { font-size: 1rem; }
+    .modal-points li { font-size: 0.95rem; }
+    .modal-takeaway { font-size: 1.05rem; }
+  }
+
+  /* Error / loading state */
+  .loading {
+    position: fixed;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.8rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    opacity: 0.5;
+  }
+
+  @media (max-width: 720px) {
+    .poster { grid-template-columns: 1fr; grid-template-rows: auto 1fr auto auto; }
+    .tl, .tr { grid-row: 1; grid-column: 1; justify-self: start; }
+    .tr { display: none; }
+    .content { grid-row: 2; grid-column: 1; }
+    .bl { grid-row: 3; grid-column: 1; justify-self: start; }
+    .br { grid-row: 4; grid-column: 1; justify-self: start; align-self: start; }
+    .quote[data-bucket="xs"] { font-size: clamp(2.5rem, 13vw, 5rem); }
+    .quote[data-bucket="sm"] { font-size: clamp(2rem, 10vw, 4rem); }
+    .quote[data-bucket="md"] { font-size: clamp(1.5rem, 7.5vw, 3rem); }
+    .quote[data-bucket="lg"] { font-size: clamp(1.1rem, 5.5vw, 2.4rem); }
+    .dot, .tick { display: none; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .word, .attribution { animation: none; opacity: 1; transform: none; }
+    .dot { animation: none; }
+    html, body, * { transition: none !important; }
+  }
+</style>
+</head>
+<body>
+
+<svg class="noise" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+  <filter id="grain">
+    <feTurbulence type="fractalNoise" baseFrequency="0.92" numOctaves="2" stitchTiles="stitch"/>
+    <feColorMatrix type="saturate" values="0"/>
+  </filter>
+  <rect width="100%" height="100%" filter="url(#grain)"/>
+</svg>
+
+<main class="poster" id="poster" style="display:none">
+  <div class="meta tl">
+    <span class="accent-dot"></span>Daily Builder &nbsp; № <span id="poster-num">001</span>
+  </div>
+  <div class="meta tr">
+    From Lenny's Podcast
+  </div>
+
+  <div class="content">
+    <span class="tick" aria-hidden="true"></span>
+    <h1 class="quote" id="quote" data-bucket="sm">…</h1>
+    <div class="attribution" id="attribution">
+      <div class="guest" id="guest">—</div>
+      <div class="role" id="role">—</div>
+      <button class="read" id="read" type="button">Read summary</button>
+    </div>
+    <span class="dot" aria-hidden="true"></span>
+  </div>
+
+  <div class="meta bl">
+    <span id="date">—</span>
+  </div>
+  <div class="meta br controls">
+    <button id="prev" title="Previous (←)">←&nbsp;Prev</button>
+    <button id="rand" title="Shuffle (R or Space)">Shuffle</button>
+    <button id="today" title="Today (T)">Today</button>
+    <button id="next" title="Next (→)">Next&nbsp;→</button>
+  </div>
+</main>
+
+<div class="modal" id="summary-modal" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="modal-guest">
+  <div class="modal-panel" role="document">
+    <button class="modal-close" id="modal-close" aria-label="Close">×</button>
+    <div class="modal-tag">Explained</div>
+    <p class="modal-quote" id="modal-quote"></p>
+    <div class="modal-attr">
+      <span class="modal-guest" id="modal-guest"></span>
+      <span class="modal-role" id="modal-role"></span>
+    </div>
+    <div class="modal-eptitle" id="modal-eptitle"></div>
+    <div class="modal-section-label">What it means</div>
+    <p class="modal-meaning" id="modal-meaning"></p>
+    <div class="modal-section-label">The argument</div>
+    <ul class="modal-points" id="modal-points"></ul>
+    <div class="modal-section-label">Why it matters</div>
+    <p class="modal-takeaway" id="modal-matters"></p>
+    <a class="modal-watch" id="modal-watch" href="#" target="_blank" rel="noopener noreferrer">Watch the full episode</a>
+  </div>
+</div>
+
+<div class="loading" id="loading">Loading posters…</div>
+
+<script src="posters.js"></script>
+<script>
+  // 30 hand-tuned palettes; each poster cycles through them by index.
+  const PALETTES = [
+    { bg: "#1a2332", fg: "#f4ede0", accent: "#ff6b3d" },
+    { bg: "#f5cf3a", fg: "#0d0d0d", accent: "#a8473a" },
+    { bg: "#a8473a", fg: "#f0e6d2", accent: "#f5cf3a" },
+    { bg: "#7a8a73", fg: "#141414", accent: "#c97a40" },
+    { bg: "#1c1c1e", fg: "#e8e0c8", accent: "#f5cf3a" },
+    { bg: "#e87555", fg: "#faf3e3", accent: "#1a2332" },
+    { bg: "#2d4a3e", fg: "#e8e0d0", accent: "#d4a574" },
+    { bg: "#2b3990", fg: "#f0e8d2", accent: "#ff5733" },
+    { bg: "#b85e3a", fg: "#f4ede0", accent: "#2d4a3e" },
+    { bg: "#e8dcc4", fg: "#1c1c1e", accent: "#a8473a" },
+    { bg: "#4a3550", fg: "#e8d8c0", accent: "#c97a40" },
+    { bg: "#4a5c6e", fg: "#f0e6d2", accent: "#f5cf3a" },
+    { bg: "#6a6234", fg: "#f4ede0", accent: "#e87555" },
+    { bg: "#ff5722", fg: "#0d0d0d", accent: "#1a2332" },
+    { bg: "#ede4d0", fg: "#2d4a3e", accent: "#a8473a" },
+    { bg: "#2a3458", fg: "#ede4d0", accent: "#ff5733" },
+    { bg: "#d4a017", fg: "#1c1c1e", accent: "#2d4a3e" },
+    { bg: "#1c4a4a", fg: "#f0e6d2", accent: "#d4a017" },
+    { bg: "#f0907a", fg: "#5a1a1a", accent: "#1c4a4a" },
+    { bg: "#0d0d0d", fg: "#c8e8d0", accent: "#ff5733" },
+    { bg: "#b8a878", fg: "#0d0d0d", accent: "#a8473a" },
+    { bg: "#b8c8d8", fg: "#1a2332", accent: "#ff5733" },
+    { bg: "#5a1a1a", fg: "#ede4d0", accent: "#d4a017" },
+    { bg: "#d8c8a8", fg: "#2a1a0a", accent: "#2d4a3e" },
+    { bg: "#5a7a8a", fg: "#f0e6d2", accent: "#d4a017" },
+    { bg: "#d97826", fg: "#ede4d0", accent: "#1a2332" },
+    { bg: "#4a5c2a", fg: "#f4ede0", accent: "#d97826" },
+    { bg: "#c0b0d0", fg: "#2a3458", accent: "#a8473a" },
+    { bg: "#8a1f2e", fg: "#ede4d0", accent: "#d4a017" },
+    { bg: "#1a4a8a", fg: "#f5cf3a", accent: "#ede4d0" }
+  ];
+
+  const $ = (s) => document.querySelector(s);
+
+  function dayOfYear(date = new Date()) {
+    const start = new Date(date.getFullYear(), 0, 0);
+    return Math.floor((date - start) / 86400000);
+  }
+
+  function formatDate(d = new Date()) {
+    const y = d.getFullYear();
+    const m = String(d.getMonth() + 1).padStart(2, '0');
+    const day = String(d.getDate()).padStart(2, '0');
+    const wd = ['SUN','MON','TUE','WED','THU','FRI','SAT'][d.getDay()];
+    return `${y}.${m}.${day} · ${wd}`;
+  }
+
+  function bucket(wordCount) {
+    if (wordCount <= 6) return 'xs';
+    if (wordCount <= 12) return 'sm';
+    if (wordCount <= 18) return 'md';
+    return 'lg';
+  }
+
+  // Boot
+  if (typeof POSTERS_DATA === 'undefined' || !Array.isArray(POSTERS_DATA) || POSTERS_DATA.length === 0) {
+    $('#loading').textContent = 'No posters loaded — check posters.js';
+  } else {
+    $('#loading').remove();
+    $('#poster').style.display = '';
+    const POSTERS = POSTERS_DATA;
+    let currentIdx = dayOfYear() % POSTERS.length;
+
+    function render(idx) {
+      const p = POSTERS[idx];
+      const palette = PALETTES[idx % PALETTES.length];
+      const r = document.documentElement.style;
+      r.setProperty('--bg', palette.bg);
+      r.setProperty('--fg', palette.fg);
+      r.setProperty('--accent', palette.accent);
+
+      $('#poster-num').textContent = String(idx + 1).padStart(3, '0');
+
+      const words = (p.quote || '').split(' ');
+      const b = bucket(words.length);
+      const quoteEl = $('#quote');
+      quoteEl.setAttribute('data-bucket', b);
+      quoteEl.innerHTML = '';
+      const stagger = b === 'lg' ? 0.045 : (b === 'md' ? 0.06 : 0.085);
+      words.forEach((w, i) => {
+        const span = document.createElement('span');
+        span.className = 'word';
+        span.textContent = w;
+        span.style.animationDelay = `${i * stagger + 0.1}s`;
+        quoteEl.appendChild(span);
+        if (i < words.length - 1) quoteEl.appendChild(document.createTextNode(' '));
+      });
+
+      // attribution
+      $('#guest').textContent = p.guest || '';
+      $('#role').textContent = p.guest_role || '';
+      // delay attribution fade-in until after quote stagger
+      const attrDelay = Math.min(0.1 + words.length * stagger + 0.25, 2.4);
+      $('#attribution').style.setProperty('--attr-delay', `${attrDelay}s`);
+      // re-trigger animation
+      const attr = $('#attribution');
+      attr.style.animation = 'none';
+      void attr.offsetWidth;
+      attr.style.animation = '';
+
+      document.title = `${p.quote}  —  Daily / Builder Quotes`;
+    }
+
+    function nav(delta) {
+      currentIdx = (currentIdx + delta + POSTERS.length) % POSTERS.length;
+      render(currentIdx);
+    }
+
+    function shuffle() {
+      let idx;
+      do { idx = Math.floor(Math.random() * POSTERS.length); }
+      while (idx === currentIdx && POSTERS.length > 1);
+      currentIdx = idx;
+      render(currentIdx);
+    }
+
+    function today() {
+      currentIdx = dayOfYear() % POSTERS.length;
+      render(currentIdx);
+    }
+
+    // ─── Summary modal ───
+    const modal = $('#summary-modal');
+    let lastFocus = null;
+
+    function openSummary() {
+      const p = POSTERS[currentIdx];
+      const e = p.explanation;
+      if (!e || !e.meaning) return;
+
+      $('#modal-quote').textContent = p.quote || '';
+      $('#modal-guest').textContent = p.guest || '';
+      $('#modal-role').textContent = p.guest_role || '';
+      $('#modal-eptitle').textContent = p.title || '';
+      $('#modal-meaning').textContent = e.meaning;
+
+      const ul = $('#modal-points');
+      ul.innerHTML = '';
+      (e.argument || []).forEach(pt => {
+        const li = document.createElement('li');
+        li.textContent = pt;
+        ul.appendChild(li);
+      });
+
+      $('#modal-matters').textContent = e.matters || '';
+
+      const w = $('#modal-watch');
+      if (p.youtube_url) {
+        w.href = p.youtube_url;
+        w.style.display = '';
+      } else {
+        w.style.display = 'none';
+      }
+
+      lastFocus = document.activeElement;
+      modal.classList.add('open');
+      modal.setAttribute('aria-hidden', 'false');
+      // focus close button so ESC works and keyboard users get a target
+      setTimeout(() => $('#modal-close').focus(), 50);
+    }
+
+    function closeSummary() {
+      modal.classList.remove('open');
+      modal.setAttribute('aria-hidden', 'true');
+      if (lastFocus && lastFocus.focus) lastFocus.focus();
+    }
+
+    function isModalOpen() { return modal.classList.contains('open'); }
+
+    $('#read').addEventListener('click', openSummary);
+    $('#modal-close').addEventListener('click', closeSummary);
+    modal.addEventListener('click', (e) => {
+      if (e.target === modal) closeSummary();
+    });
+
+    document.addEventListener('keydown', (e) => {
+      if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+      if (isModalOpen()) {
+        if (e.key === 'Escape') closeSummary();
+        return; // swallow other keys while modal is open
+      }
+      if (e.key === 'ArrowLeft') nav(-1);
+      else if (e.key === 'ArrowRight') nav(1);
+      else if (e.key === 'r' || e.key === 'R') shuffle();
+      else if (e.key === 't' || e.key === 'T') today();
+      else if (e.key === ' ') { e.preventDefault(); shuffle(); }
+      else if (e.key === 's' || e.key === 'S') openSummary();
+    });
+
+    $('#prev').addEventListener('click', () => nav(-1));
+    $('#next').addEventListener('click', () => nav(1));
+    $('#rand').addEventListener('click', shuffle);
+    $('#today').addEventListener('click', today);
+
+    $('#date').textContent = formatDate();
+    render(currentIdx);
+  }
+</script>
+
+</body>
+</html>
