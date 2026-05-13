@@ -685,7 +685,7 @@
   // 30 hand-tuned palettes; each poster cycles through them by index.
   const PALETTES = [
     { bg: "#1a2332", fg: "#f4ede0", accent: "#ff6b3d" },
-    { bg: "#f5cf3a", fg: "#0d0d0d", accent: "#a8473a" },
+    { bg: "#bfa14a", fg: "#1c1c1e", accent: "#7a2a1f" },  // softened bright yellow → antique gold
     { bg: "#a8473a", fg: "#f0e6d2", accent: "#f5cf3a" },
     { bg: "#7a8a73", fg: "#141414", accent: "#c97a40" },
     { bg: "#1c1c1e", fg: "#e8e0c8", accent: "#f5cf3a" },
@@ -697,10 +697,10 @@
     { bg: "#4a3550", fg: "#e8d8c0", accent: "#c97a40" },
     { bg: "#4a5c6e", fg: "#f0e6d2", accent: "#f5cf3a" },
     { bg: "#6a6234", fg: "#f4ede0", accent: "#e87555" },
-    { bg: "#ff5722", fg: "#0d0d0d", accent: "#1a2332" },
+    { bg: "#b54a2e", fg: "#f4ede0", accent: "#1a2332" },  // softened inferno orange → muted rust
     { bg: "#ede4d0", fg: "#2d4a3e", accent: "#a8473a" },
     { bg: "#2a3458", fg: "#ede4d0", accent: "#ff5733" },
-    { bg: "#d4a017", fg: "#1c1c1e", accent: "#2d4a3e" },
+    { bg: "#a88a3a", fg: "#1c1c1e", accent: "#2d4a3e" },  // softened mustard → muted ochre
     { bg: "#1c4a4a", fg: "#f0e6d2", accent: "#d4a017" },
     { bg: "#f0907a", fg: "#5a1a1a", accent: "#1c4a4a" },
     { bg: "#0d0d0d", fg: "#c8e8d0", accent: "#ff5733" },
@@ -713,7 +713,8 @@
     { bg: "#4a5c2a", fg: "#f4ede0", accent: "#d97826" },
     { bg: "#c0b0d0", fg: "#2a3458", accent: "#a8473a" },
     { bg: "#8a1f2e", fg: "#ede4d0", accent: "#d4a017" },
-    { bg: "#1a4a8a", fg: "#f5cf3a", accent: "#ede4d0" }
+    { bg: "#1a4a8a", fg: "#ede4d0", accent: "#f5cf3a" }   // swap yellow text → cream, yellow demoted to accent
+
   ];
 
   const $ = (s) => document.querySelector(s);
