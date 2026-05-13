@@ -159,31 +159,37 @@ if (typeof POSTERS_DATA === 'undefined' || !Array.isArray(POSTERS_DATA) || POSTE
     return true;
   }
 
-  // Session-only navigation history. Starts with today; grows on "next",
-  // shrinks on "prev".
-  const viewHistory = [currentIdx];
+  // Each session generates one fixed random order: [today, ...shuffled rest].
+  // Next/Prev walk a pointer on this order — deterministic forward/back, so
+  // Prev then Next always returns to the same quote.
+  const order = (function makeOrder() {
+    const rest = [];
+    for (let i = 0; i < POSTERS.length; i++) if (i !== currentIdx) rest.push(i);
+    for (let i = rest.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [rest[i], rest[j]] = [rest[j], rest[i]];
+    }
+    return [currentIdx].concat(rest);
+  })();
+  let position = 0;
 
   function updatePrevButton() {
-    const prev = $('#prev');
-    prev.disabled = viewHistory.length <= 1;
+    $('#prev').disabled = position <= 0;
   }
 
   function next() {
     if (leaveWelcome()) return;
-    let idx;
-    do { idx = Math.floor(Math.random() * POSTERS.length); }
-    while (idx === currentIdx && POSTERS.length > 1);
-    currentIdx = idx;
-    viewHistory.push(idx);
+    position = (position + 1) % order.length; // wrap at end
+    currentIdx = order[position];
     render(currentIdx);
     updatePrevButton();
   }
 
   function prev() {
     if (leaveWelcome()) return;
-    if (viewHistory.length <= 1) return;
-    viewHistory.pop();
-    currentIdx = viewHistory[viewHistory.length - 1];
+    if (position <= 0) return;
+    position--;
+    currentIdx = order[position];
     render(currentIdx);
     updatePrevButton();
   }
