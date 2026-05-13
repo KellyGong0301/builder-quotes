@@ -22,3 +22,6 @@ screenshot-*.png
 
 # Build artifacts
 dist/
+
+# Chrome Web Store submission materials (private — screenshots + listing copy)
+store-assets/
