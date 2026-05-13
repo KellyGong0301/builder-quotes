@@ -85,6 +85,31 @@
     transition: background var(--t);
   }
 
+  /* Top-right "Made by Kelly" link */
+  .meta .madeby {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45em;
+    color: inherit;
+    text-decoration: none;
+    opacity: 0.55;
+    transition: opacity 0.25s ease, gap 0.25s ease;
+    margin-top: 0.35rem;
+  }
+  .meta .madeby::after {
+    content: "→";
+    color: var(--accent);
+    font-weight: 600;
+    transition: color var(--t), transform 0.25s ease;
+  }
+  .meta .madeby:hover { opacity: 1; gap: 0.7em; }
+  .meta .stack {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 0;
+  }
+
   .tl { grid-row: 1; grid-column: 1; align-self: start; }
   .tr { grid-row: 1; grid-column: 2; justify-self: end; align-self: start; }
   .bl { grid-row: 3; grid-column: 1; align-self: end; }
@@ -534,6 +559,42 @@
     border-left-color: var(--bg);
   }
 
+  .modal-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+  }
+
+  .modal-thanks {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.55em;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: clamp(0.6rem, 0.78vw, 0.74rem);
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    font-weight: 500;
+    padding: 0.65rem 1rem;
+    border: 1px solid var(--accent);
+    background: var(--accent);
+    color: var(--bg);
+    text-decoration: none;
+    transition: opacity 0.25s ease, gap 0.25s ease, transform 0.25s ease;
+  }
+  .modal-thanks::before {
+    content: "♥";
+    font-size: 0.95em;
+    line-height: 1;
+  }
+  .modal-thanks:hover {
+    gap: 0.85em;
+    transform: translateY(-1px);
+  }
+  .modal-thanks:focus-visible {
+    outline: 2px solid var(--fg);
+    outline-offset: 3px;
+  }
+
   @media (max-width: 720px) {
     .modal-quote { font-size: 1.55rem; }
     .modal-meaning { font-size: 1rem; }
@@ -591,7 +652,10 @@
     <span class="accent-dot"></span>Daily Builder &nbsp; № <span id="poster-num">001</span>
   </div>
   <div class="meta tr">
-    From Lenny's Podcast
+    <div class="stack">
+      <span>From Lenny's Podcast</span>
+      <a class="madeby" href="thanks.html">Made by Kelly</a>
+    </div>
   </div>
 
   <div class="content">
@@ -631,7 +695,10 @@
     <ul class="modal-points" id="modal-points"></ul>
     <div class="modal-section-label">Why it matters</div>
     <p class="modal-takeaway" id="modal-matters"></p>
-    <a class="modal-watch" id="modal-watch" href="#" target="_blank" rel="noopener noreferrer">Watch the full episode</a>
+    <div class="modal-actions">
+      <a class="modal-watch" id="modal-watch" href="#" target="_blank" rel="noopener noreferrer">Watch the full episode</a>
+      <a class="modal-thanks" href="thanks.html">Say thanks to Kelly</a>
+    </div>
   </div>
 </div>
 
