@@ -13,6 +13,7 @@
     --fg: #f4ede0;
     --accent: #ff6b3d;
     --dim: rgba(244, 237, 224, 0.55);
+    --line: rgba(244, 237, 224, 0.1);
   }
   *,*::before,*::after { margin: 0; padding: 0; box-sizing: border-box; }
   html, body {
@@ -31,7 +32,7 @@
   }
 
   .page {
-    max-width: 720px;
+    max-width: 760px;
     margin: 0 auto;
     padding: clamp(2.5rem, 6vw, 5rem) clamp(1.5rem, 4vw, 3rem);
     position: relative;
@@ -64,7 +65,6 @@
     border-right: 7px solid var(--accent);
     border-top: 4px solid transparent;
     border-bottom: 4px solid transparent;
-    transition: border-right-color 0.3s ease;
   }
   .topbar a:hover { opacity: 1; gap: 0.85em; }
   .topbar .tag .dot {
@@ -116,7 +116,7 @@
     text-transform: uppercase;
     opacity: 0.5;
     font-weight: 500;
-    margin-bottom: 0.9rem;
+    margin-bottom: 1.2rem;
     display: flex; align-items: center;
     gap: 0.65em;
   }
@@ -126,9 +126,8 @@
     background: var(--accent);
   }
 
-  /* Sections */
   section {
-    margin-bottom: clamp(2.5rem, 5vw, 3.5rem);
+    margin-bottom: clamp(3rem, 6vw, 4rem);
   }
   section p {
     font-family: 'Bricolage Grotesque', sans-serif;
@@ -138,12 +137,82 @@
     color: var(--fg);
   }
 
-  /* Outlets list */
+  /* Project list — one row per project */
+  .projects {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+  }
+  .projects a {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 1.5rem;
+    padding: 1.4rem 0;
+    color: inherit;
+    text-decoration: none;
+    border-bottom: 1px solid var(--line);
+    transition: padding 0.25s ease;
+  }
+  .projects a:last-child { border-bottom: 0; }
+  .projects a:hover { padding-left: 0.4rem; }
+
+  .project-text {
+    flex: 1;
+    min-width: 0;
+  }
+  .project-name {
+    font-family: 'Bricolage Grotesque', sans-serif;
+    font-size: clamp(1.15rem, 1.5vw, 1.4rem);
+    font-weight: 700;
+    letter-spacing: -0.015em;
+    margin-bottom: 0.35rem;
+    font-variation-settings: "wght" 700, "opsz" 28;
+    display: flex;
+    align-items: center;
+    gap: 0.6em;
+  }
+  .project-name .stars {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.12em;
+    font-weight: 500;
+    opacity: 0.55;
+    padding: 0.18rem 0.45rem;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+  }
+  .project-name .stars::before {
+    content: "★";
+    color: var(--accent);
+    margin-right: 0.3em;
+  }
+  .project-desc {
+    font-family: 'Bricolage Grotesque', sans-serif;
+    font-size: clamp(0.95rem, 1.1vw, 1.05rem);
+    line-height: 1.5;
+    opacity: 0.75;
+    font-variation-settings: "wght" 420, "opsz" 18;
+  }
+  .project-arrow {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--accent);
+    opacity: 0.65;
+    margin-top: 0.5em;
+    white-space: nowrap;
+    transition: opacity 0.25s ease, transform 0.25s ease;
+  }
+  .projects a:hover .project-arrow {
+    opacity: 1;
+    transform: translateX(4px);
+  }
+
+  /* Generic link list for footer-like sections */
   .links {
     list-style: none;
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 0.25rem;
   }
   .links a {
     display: flex;
@@ -152,15 +221,15 @@
     padding: 1rem 0;
     color: inherit;
     text-decoration: none;
-    border-bottom: 1px solid rgba(244, 237, 224, 0.1);
+    border-bottom: 1px solid var(--line);
     transition: opacity 0.25s ease;
   }
   .links a:last-child { border-bottom: 0; }
   .links .label {
     font-family: 'Bricolage Grotesque', sans-serif;
-    font-size: clamp(1.05rem, 1.3vw, 1.2rem);
+    font-size: clamp(1rem, 1.2vw, 1.1rem);
     font-weight: 600;
-    font-variation-settings: "wght" 600, "opsz" 24;
+    font-variation-settings: "wght" 600, "opsz" 22;
   }
   .links .arrow {
     font-family: 'JetBrains Mono', monospace;
@@ -171,21 +240,12 @@
     opacity: 0.7;
     transition: opacity 0.25s ease, transform 0.25s ease;
   }
-  .links a:hover { opacity: 1; }
   .links a:hover .arrow { opacity: 1; transform: translateX(4px); }
 
-  .placeholder {
-    opacity: 0.4;
-    cursor: default;
-    pointer-events: none;
-  }
-  .placeholder .arrow { color: var(--dim); }
-
-  /* Footer */
   footer {
     margin-top: clamp(4rem, 8vw, 6rem);
     padding-top: 2rem;
-    border-top: 1px solid rgba(244, 237, 224, 0.1);
+    border-top: 1px solid var(--line);
     font-family: 'JetBrains Mono', monospace;
     font-size: clamp(0.6rem, 0.74vw, 0.7rem);
     letter-spacing: 0.18em;
@@ -195,6 +255,8 @@
 
   @media (max-width: 600px) {
     .topbar { flex-direction: column; align-items: flex-start; gap: 0.6rem; }
+    .projects a { flex-direction: column; gap: 0.5rem; padding-left: 0 !important; }
+    .project-arrow { margin-top: 0; }
   }
 </style>
 </head>
@@ -223,33 +285,49 @@
     I built Daily Builder Quotes because I kept reaching for builder wisdom and forgetting where I'd read it. Now it greets me every time I open a new tab — and I wanted to share it with you.
   </p>
 
-  <section>
-    <div class="section-label">Why I made this</div>
-    <p>
-      Lenny Rachitsky open-sourced 300+ podcast transcripts. Most of us never have time to listen end-to-end, but the best lines are the kind you want to re-read on bad days. I extracted one quote per day plus a plain-English unpacking — so two minutes a day gives you the punchline and the reasoning.
-    </p>
-    <p>
-      All quotes are real guest words from the transcripts, attributed and linked to their full episode. Nothing made up.
-    </p>
-  </section>
+  <p class="lede" style="font-size: clamp(1rem, 1.3vw, 1.2rem); opacity: 0.7;">
+    Most of what I build are <strong style="color: var(--accent); font-weight: 600;">small agent skills</strong> — portable tools that drop into Claude Code or similar agents and do one thing well. Here's what else I've shipped.
+  </p>
 
   <section>
-    <div class="section-label">What I'm working on next</div>
-    <p>
-      A few experiments I'm building publicly. If any of these resonate, the best way to stay in the loop is via the links below.
-    </p>
-    <ul class="links">
-      <li><a class="placeholder" href="#"><span class="label">[Next project — coming soon]</span><span class="arrow">soon →</span></a></li>
-      <li><a class="placeholder" href="#"><span class="label">[Store / merch — coming soon]</span><span class="arrow">soon →</span></a></li>
-    </ul>
-  </section>
-
-  <section>
-    <div class="section-label">Stay in touch</div>
-    <ul class="links">
-      <li><a class="placeholder" href="#"><span class="label">Twitter / X</span><span class="arrow">@handle →</span></a></li>
-      <li><a class="placeholder" href="#"><span class="label">Newsletter</span><span class="arrow">subscribe →</span></a></li>
-      <li><a class="placeholder" href="#"><span class="label">Email</span><span class="arrow">say hi →</span></a></li>
+    <div class="section-label">Other things I've built</div>
+    <ul class="projects">
+      <li>
+        <a href="https://github.com/KellyGong0301/phd-agent" target="_blank" rel="noopener noreferrer">
+          <div class="project-text">
+            <div class="project-name">phd-agent <span class="stars">2</span></div>
+            <div class="project-desc">End-to-end PhD research paper writer — Foundation → Pilot → Full Experiment → Writing, with advisor critique at every gate and a live web dashboard you can watch.</div>
+          </div>
+          <span class="project-arrow">view →</span>
+        </a>
+      </li>
+      <li>
+        <a href="https://github.com/KellyGong0301/frontend-post" target="_blank" rel="noopener noreferrer">
+          <div class="project-text">
+            <div class="project-name">frontend-post</div>
+            <div class="project-desc">Turn any text into 小红书-style image carousels. 12 curated Chinese typography styles, colors, decoration and composition all controllable.</div>
+          </div>
+          <span class="project-arrow">view →</span>
+        </a>
+      </li>
+      <li>
+        <a href="https://github.com/KellyGong0301/experiment-validity-checker" target="_blank" rel="noopener noreferrer">
+          <div class="project-text">
+            <div class="project-name">experiment-validity-checker</div>
+            <div class="project-desc">Pre-flight validity audit for empirical AI research — five threat categories, PASS / FAIL verdict with required fixes. Catches what technical-correctness checks miss.</div>
+          </div>
+          <span class="project-arrow">view →</span>
+        </a>
+      </li>
+      <li>
+        <a href="https://github.com/KellyGong0301/learn-something" target="_blank" rel="noopener noreferrer">
+          <div class="project-text">
+            <div class="project-name">learn-something</div>
+            <div class="project-desc">A tiny agent skill for the idle moments. While you wait for a long command, it hands you one short story that quietly teaches an obscure, useful idea.</div>
+          </div>
+          <span class="project-arrow">view →</span>
+        </a>
+      </li>
     </ul>
   </section>
 
@@ -257,7 +335,7 @@
     <div class="section-label">Or just keep reading</div>
     <ul class="links">
       <li><a href="./index.html"><span class="label">Back to today's builder quote</span><span class="arrow">→</span></a></li>
-      <li><a href="https://github.com/KellyGong0301/builder-quotes" target="_blank" rel="noopener noreferrer"><span class="label">Source on GitHub</span><span class="arrow">repo →</span></a></li>
+      <li><a href="https://github.com/KellyGong0301" target="_blank" rel="noopener noreferrer"><span class="label">All my projects on GitHub</span><span class="arrow">profile →</span></a></li>
       <li><a href="https://www.lennysnewsletter.com/podcast" target="_blank" rel="noopener noreferrer"><span class="label">Subscribe to Lenny's Podcast (the source)</span><span class="arrow">podcast →</span></a></li>
     </ul>
   </section>
