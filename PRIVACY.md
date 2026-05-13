@@ -11,11 +11,13 @@ Daily Builder Quotes is a Chrome extension that replaces your new tab page with 
 The extension does not collect, store, transmit, log, or share any data about you, your browser, your browsing history, or the pages you visit. It does not use:
 
 - Cookies
-- Local storage / IndexedDB / Web SQL
+- IndexedDB / Web SQL
 - Analytics (no Google Analytics, no telemetry of any kind)
 - Crash reporting
 - A/B testing or feature flags
 - Account systems
+
+**One local-only flag:** The extension stores a single key in your browser's `localStorage` named `bqOnboarded`. Its value is just `"1"` and it indicates that you've dismissed the first-install welcome screen. This flag never leaves your machine and is not associated with any identifier. You can clear it any time via your browser's site-data settings.
 
 ## Permissions we request
 

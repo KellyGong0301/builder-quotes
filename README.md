@@ -41,10 +41,10 @@ This is a per-profile Chrome setting, persistent. Every new-tab extension (Momen
 
 | Key | Action |
 |---|---|
-| `←` / `→` | Previous / Next quote |
-| `R` or `Space` | Random quote |
-| `S` | Open the summary modal |
-| `ESC` | Close summary |
+| `→` / `R` / `Space` | Next (random new quote you haven't seen this session) |
+| `←` | Previous (walks back through what you've seen) |
+| `S` | Open the Read more modal |
+| `ESC` | Close the modal |
 
 ## Tech
 
