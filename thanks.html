@@ -13,6 +13,7 @@
     --fg: #f4ede0;
     --accent: #ff6b3d;
     --dim: rgba(244, 237, 224, 0.55);
+    --line: rgba(244, 237, 224, 0.1);
   }
   *,*::before,*::after { margin: 0; padding: 0; box-sizing: border-box; }
   html, body {
@@ -31,13 +32,12 @@
   }
 
   .page {
-    max-width: 720px;
+    max-width: 880px;
     margin: 0 auto;
     padding: clamp(2.5rem, 6vw, 5rem) clamp(1.5rem, 4vw, 3rem);
     position: relative;
   }
 
-  /* Top bar */
   .topbar {
     display: flex;
     justify-content: space-between;
@@ -64,7 +64,6 @@
     border-right: 7px solid var(--accent);
     border-top: 4px solid transparent;
     border-bottom: 4px solid transparent;
-    transition: border-right-color 0.3s ease;
   }
   .topbar a:hover { opacity: 1; gap: 0.85em; }
   .topbar .tag .dot {
@@ -77,7 +76,6 @@
   }
   .topbar .tag { opacity: 0.65; }
 
-  /* Hero */
   .wave {
     display: block;
     font-size: clamp(3rem, 7vw, 5rem);
@@ -90,25 +88,25 @@
     font-weight: 700;
     line-height: 1.02;
     letter-spacing: -0.035em;
-    margin-bottom: clamp(1.6rem, 3.5vw, 2.4rem);
+    margin-bottom: clamp(1.4rem, 3vw, 2rem);
     font-variation-settings: "wght" 720, "opsz" 80;
   }
   h1.headline em {
     font-style: normal;
     color: var(--accent);
   }
-
   .lede {
     font-family: 'Bricolage Grotesque', sans-serif;
-    font-size: clamp(1.15rem, 1.6vw, 1.45rem);
+    font-size: clamp(1.05rem, 1.4vw, 1.3rem);
     line-height: 1.5;
-    letter-spacing: -0.01em;
+    letter-spacing: -0.005em;
     color: var(--fg);
-    margin-bottom: clamp(2.5rem, 5vw, 3.5rem);
-    font-variation-settings: "wght" 450, "opsz" 32;
+    opacity: 0.85;
+    margin-bottom: clamp(3rem, 6vw, 4rem);
+    font-variation-settings: "wght" 450, "opsz" 28;
+    max-width: 580px;
   }
 
-  /* Section labels */
   .section-label {
     font-family: 'JetBrains Mono', monospace;
     font-size: clamp(0.6rem, 0.74vw, 0.7rem);
@@ -116,7 +114,7 @@
     text-transform: uppercase;
     opacity: 0.5;
     font-weight: 500;
-    margin-bottom: 0.9rem;
+    margin-bottom: 1.5rem;
     display: flex; align-items: center;
     gap: 0.65em;
   }
@@ -126,24 +124,120 @@
     background: var(--accent);
   }
 
-  /* Sections */
   section {
-    margin-bottom: clamp(2.5rem, 5vw, 3.5rem);
-  }
-  section p {
-    font-family: 'Bricolage Grotesque', sans-serif;
-    font-size: clamp(1rem, 1.2vw, 1.15rem);
-    line-height: 1.55;
-    margin-bottom: 0.9rem;
-    color: var(--fg);
+    margin-bottom: clamp(3rem, 6vw, 4rem);
   }
 
-  /* Outlets list */
-  .links {
+  /* Cards — image-text */
+  .cards {
     list-style: none;
     display: grid;
-    grid-template-columns: 1fr;
-    gap: 0.25rem;
+    grid-template-columns: repeat(2, 1fr);
+    gap: clamp(1.2rem, 2.5vw, 1.8rem);
+  }
+  .card {
+    color: inherit;
+    text-decoration: none;
+    display: flex;
+    flex-direction: column;
+    transition: transform 0.3s ease;
+  }
+  .card:hover { transform: translateY(-3px); }
+
+  .card-cover {
+    aspect-ratio: 4 / 3;
+    overflow: hidden;
+    border: 1px solid var(--line);
+    margin-bottom: 0.9rem;
+    background: #0d1620;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .card-cover img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.45s ease;
+  }
+  .card:hover .card-cover img { transform: scale(1.03); }
+
+  /* Typographic cover (for projects without preview images) */
+  .card-cover.typo {
+    background: linear-gradient(135deg, #1a2332 0%, #243047 100%);
+    padding: clamp(1rem, 2.5vw, 1.5rem);
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: space-between;
+    text-align: left;
+  }
+  .card-cover.typo .typo-mark {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: clamp(0.55rem, 0.7vw, 0.66rem);
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    opacity: 0.5;
+    display: flex; align-items: center; gap: 0.5em;
+  }
+  .card-cover.typo .typo-mark::before {
+    content: "";
+    width: 14px; height: 1px;
+    background: var(--accent);
+  }
+  .card-cover.typo .typo-title {
+    font-family: 'Bricolage Grotesque', sans-serif;
+    font-weight: 700;
+    font-size: clamp(1.4rem, 2.6vw, 2rem);
+    line-height: 1.0;
+    letter-spacing: -0.025em;
+    font-variation-settings: "wght" 720, "opsz" 48;
+  }
+  .card-cover.typo .typo-title em {
+    font-style: normal;
+    color: var(--accent);
+  }
+  .card-cover.typo .typo-foot {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: clamp(0.55rem, 0.7vw, 0.66rem);
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    opacity: 0.45;
+  }
+
+  .card-name {
+    font-family: 'Bricolage Grotesque', sans-serif;
+    font-size: clamp(1rem, 1.25vw, 1.18rem);
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    margin-bottom: 0.3rem;
+    font-variation-settings: "wght" 700, "opsz" 22;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5em;
+  }
+  .card-name .arrow {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.18em;
+    color: var(--accent);
+    opacity: 0.7;
+    font-weight: 500;
+    transition: opacity 0.25s ease, transform 0.25s ease;
+  }
+  .card:hover .arrow { opacity: 1; transform: translateX(3px); }
+  .card-tagline {
+    font-family: 'Bricolage Grotesque', sans-serif;
+    font-size: clamp(0.85rem, 1vw, 0.95rem);
+    line-height: 1.45;
+    opacity: 0.65;
+    font-variation-settings: "wght" 420, "opsz" 16;
+  }
+
+  /* Footer link list */
+  .links {
+    list-style: none;
   }
   .links a {
     display: flex;
@@ -152,49 +246,41 @@
     padding: 1rem 0;
     color: inherit;
     text-decoration: none;
-    border-bottom: 1px solid rgba(244, 237, 224, 0.1);
+    border-bottom: 1px solid var(--line);
     transition: opacity 0.25s ease;
   }
   .links a:last-child { border-bottom: 0; }
   .links .label {
     font-family: 'Bricolage Grotesque', sans-serif;
-    font-size: clamp(1.05rem, 1.3vw, 1.2rem);
+    font-size: clamp(0.95rem, 1.15vw, 1.05rem);
     font-weight: 600;
-    font-variation-settings: "wght" 600, "opsz" 24;
+    font-variation-settings: "wght" 600, "opsz" 20;
   }
   .links .arrow {
     font-family: 'JetBrains Mono', monospace;
-    font-size: 0.7rem;
+    font-size: 0.68rem;
     letter-spacing: 0.18em;
     text-transform: uppercase;
     color: var(--accent);
     opacity: 0.7;
     transition: opacity 0.25s ease, transform 0.25s ease;
   }
-  .links a:hover { opacity: 1; }
   .links a:hover .arrow { opacity: 1; transform: translateX(4px); }
 
-  .placeholder {
-    opacity: 0.4;
-    cursor: default;
-    pointer-events: none;
-  }
-  .placeholder .arrow { color: var(--dim); }
-
-  /* Footer */
   footer {
-    margin-top: clamp(4rem, 8vw, 6rem);
-    padding-top: 2rem;
-    border-top: 1px solid rgba(244, 237, 224, 0.1);
+    margin-top: clamp(3rem, 6vw, 5rem);
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--line);
     font-family: 'JetBrains Mono', monospace;
-    font-size: clamp(0.6rem, 0.74vw, 0.7rem);
+    font-size: clamp(0.58rem, 0.72vw, 0.68rem);
     letter-spacing: 0.18em;
     text-transform: uppercase;
-    opacity: 0.45;
+    opacity: 0.4;
   }
 
-  @media (max-width: 600px) {
+  @media (max-width: 640px) {
     .topbar { flex-direction: column; align-items: flex-start; gap: 0.6rem; }
+    .cards { grid-template-columns: 1fr; }
   }
 </style>
 </head>
@@ -220,45 +306,39 @@
   <h1 class="headline">Hi, I'm Kelly. <em>Thanks for the thanks.</em></h1>
 
   <p class="lede">
-    I built Daily Builder Quotes because I kept reaching for builder wisdom and forgetting where I'd read it. Now it greets me every time I open a new tab — and I wanted to share it with you.
+    I built Daily Builder Quotes because I kept reaching for builder wisdom and forgetting where I'd read it. If this is your kind of thing, you might also like these two.
   </p>
 
   <section>
-    <div class="section-label">Why I made this</div>
-    <p>
-      Lenny Rachitsky open-sourced 300+ podcast transcripts. Most of us never have time to listen end-to-end, but the best lines are the kind you want to re-read on bad days. I extracted one quote per day plus a plain-English unpacking — so two minutes a day gives you the punchline and the reasoning.
-    </p>
-    <p>
-      All quotes are real guest words from the transcripts, attributed and linked to their full episode. Nothing made up.
-    </p>
-  </section>
-
-  <section>
-    <div class="section-label">What I'm working on next</div>
-    <p>
-      A few experiments I'm building publicly. If any of these resonate, the best way to stay in the loop is via the links below.
-    </p>
-    <ul class="links">
-      <li><a class="placeholder" href="#"><span class="label">[Next project — coming soon]</span><span class="arrow">soon →</span></a></li>
-      <li><a class="placeholder" href="#"><span class="label">[Store / merch — coming soon]</span><span class="arrow">soon →</span></a></li>
+    <div class="section-label">A couple of other small things</div>
+    <ul class="cards">
+      <li>
+        <a class="card" href="https://github.com/KellyGong0301/frontend-post" target="_blank" rel="noopener noreferrer">
+          <div class="card-cover">
+            <img src="https://raw.githubusercontent.com/KellyGong0301/frontend-post/main/docs/preview/card_04.png" alt="frontend-post preview: 12 styles of Chinese typography cards" loading="lazy">
+          </div>
+          <div class="card-name">frontend-post <span class="arrow">view →</span></div>
+          <div class="card-tagline">Turn any text into 小红书-style image carousels. 12 curated Chinese typography styles, fully controllable.</div>
+        </a>
+      </li>
+      <li>
+        <a class="card" href="https://github.com/KellyGong0301/learn-something" target="_blank" rel="noopener noreferrer">
+          <div class="card-cover typo">
+            <span class="typo-mark">Agent skill</span>
+            <span class="typo-title">Learn <em>something</em><br>while you wait.</span>
+            <span class="typo-foot">→ One short story, one quiet idea</span>
+          </div>
+          <div class="card-name">learn-something <span class="arrow">view →</span></div>
+          <div class="card-tagline">A tiny agent skill for idle moments. While a long command runs, it hands you one short story that teaches an obscure useful idea.</div>
+        </a>
+      </li>
     </ul>
   </section>
 
   <section>
-    <div class="section-label">Stay in touch</div>
-    <ul class="links">
-      <li><a class="placeholder" href="#"><span class="label">Twitter / X</span><span class="arrow">@handle →</span></a></li>
-      <li><a class="placeholder" href="#"><span class="label">Newsletter</span><span class="arrow">subscribe →</span></a></li>
-      <li><a class="placeholder" href="#"><span class="label">Email</span><span class="arrow">say hi →</span></a></li>
-    </ul>
-  </section>
-
-  <section>
-    <div class="section-label">Or just keep reading</div>
     <ul class="links">
       <li><a href="./index.html"><span class="label">Back to today's builder quote</span><span class="arrow">→</span></a></li>
-      <li><a href="https://github.com/KellyGong0301/builder-quotes" target="_blank" rel="noopener noreferrer"><span class="label">Source on GitHub</span><span class="arrow">repo →</span></a></li>
-      <li><a href="https://www.lennysnewsletter.com/podcast" target="_blank" rel="noopener noreferrer"><span class="label">Subscribe to Lenny's Podcast (the source)</span><span class="arrow">podcast →</span></a></li>
+      <li><a href="https://github.com/KellyGong0301" target="_blank" rel="noopener noreferrer"><span class="label">All my projects on GitHub</span><span class="arrow">profile →</span></a></li>
     </ul>
   </section>
 
