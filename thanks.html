@@ -128,6 +128,47 @@
     margin-bottom: clamp(3rem, 6vw, 4rem);
   }
 
+  /* Why-I-built section: narrative paragraphs with subtle accent emphasis */
+  .why p {
+    font-family: 'Bricolage Grotesque', sans-serif;
+    font-size: clamp(1rem, 1.2vw, 1.18rem);
+    line-height: 1.6;
+    margin-bottom: 1.1rem;
+    color: var(--fg);
+    opacity: 0.92;
+    font-variation-settings: "wght" 450, "opsz" 24;
+  }
+  .why p:last-child { margin-bottom: 0; }
+  .why em {
+    font-style: normal;
+    color: var(--accent);
+    font-weight: 600;
+    font-variation-settings: "wght" 600, "opsz" 24;
+  }
+
+  /* Smaller card variant for the "other small things" demotion */
+  .cards-small {
+    grid-template-columns: repeat(2, 1fr);
+    max-width: 540px;
+    gap: 1rem;
+  }
+  .cards-small .card-cover { aspect-ratio: 4 / 3; margin-bottom: 0.6rem; }
+  .cards-small .card-cover.typo { padding: 0.85rem 1rem; }
+  .cards-small .card-cover.typo .typo-title { font-size: clamp(1rem, 1.85vw, 1.35rem); }
+  .cards-small .card-cover.typo .typo-mark,
+  .cards-small .card-cover.typo .typo-foot {
+    font-size: clamp(0.48rem, 0.62vw, 0.6rem);
+  }
+  .cards-small .card-name {
+    font-size: clamp(0.85rem, 1.05vw, 0.98rem);
+    margin-bottom: 0.18rem;
+  }
+  .cards-small .card-tagline {
+    font-size: clamp(0.78rem, 0.92vw, 0.88rem);
+    line-height: 1.4;
+  }
+  .cards-small .card-name .arrow { font-size: 0.58rem; }
+
   /* Cards — image-text */
   .cards {
     list-style: none;
@@ -301,24 +342,29 @@
     <a href="./index.html">Back to today's quote</a>
   </div>
 
-  <span class="wave" aria-hidden="true">👋</span>
+  <span class="wave" aria-hidden="true">🎆</span>
 
   <h1 class="headline">Hi, I'm Kelly. <em>Thanks for the thanks.</em></h1>
 
-  <p class="lede">
-    I built Daily Builder Quotes because I kept reaching for builder wisdom and forgetting where I'd read it. If this is your kind of thing, you might also like these two.
-  </p>
+  <section class="why">
+    <div class="section-label">Why I built this</div>
+    <p>I used to bookmark good builder quotes from podcasts and never re-read them. Or I'd hear a line I wanted to live by, write it in some note app, then lose it to the abyss of un-tagged documents. The wisdom kept disappearing into noise.</p>
+    <p>Lenny Rachitsky open-sourced 300+ transcripts of his podcast — interviews with people who built Airbnb, Stripe, Linear, Slack, ChatGPT, Cursor, and a few hundred more. Real operators explaining how they actually decide things. But the format is wrong for how I want to consume it: I don't want a 90-minute audio commitment, I want <em>one sharp line per day</em>.</p>
+    <p>So I read all 300+ transcripts (well, I had AI agents read them), pulled out the punchiest quotes, and wrote a plain-English unpacking for each one. Now my new tab gives me one of these every morning, plus a <em>Read more</em> if I want the context.</p>
+    <p>It's not a productivity tool. It's <em>environment design</em> — when my brain is about to default to a habit (open new tab → check something), it gets one good thought first.</p>
+    <p>If that resonates, the other small things I've made live in the same spirit.</p>
+  </section>
 
-  <section>
-    <div class="section-label">A couple of other small things</div>
-    <ul class="cards">
+  <section class="small-things">
+    <div class="section-label">Other small things</div>
+    <ul class="cards cards-small">
       <li>
         <a class="card" href="https://github.com/KellyGong0301/frontend-post" target="_blank" rel="noopener noreferrer">
           <div class="card-cover">
-            <img src="https://raw.githubusercontent.com/KellyGong0301/frontend-post/main/docs/preview/card_04.png" alt="frontend-post preview: 12 styles of Chinese typography cards" loading="lazy">
+            <img src="https://raw.githubusercontent.com/KellyGong0301/frontend-post/main/docs/preview/card_04.png" alt="frontend-post preview" loading="lazy">
           </div>
           <div class="card-name">frontend-post <span class="arrow">view →</span></div>
-          <div class="card-tagline">Turn any text into 小红书-style image carousels. 12 curated Chinese typography styles, fully controllable.</div>
+          <div class="card-tagline">Turn any text into 小红书-style image carousels.</div>
         </a>
       </li>
       <li>
@@ -329,7 +375,7 @@
             <span class="typo-foot">→ One short story, one quiet idea</span>
           </div>
           <div class="card-name">learn-something <span class="arrow">view →</span></div>
-          <div class="card-tagline">A tiny agent skill for idle moments. While a long command runs, it hands you one short story that teaches an obscure useful idea.</div>
+          <div class="card-tagline">A tiny agent skill for idle moments.</div>
         </a>
       </li>
     </ul>
