@@ -2,31 +2,24 @@
 
 A new tab page that shows you one quote from [Lenny's Podcast](https://www.lennysnewsletter.com/podcast) every day — 365 of them, one for each day of the year.
 
-Each poster has the quote in big type, the speaker's name and role, and a "Read summary" button that unpacks what the quote means, how the guest argues for it, and what you (as a builder) should do about it on Monday morning.
+Each poster has the quote in big type, the speaker's name and role, and a "Read more" button that unpacks what the quote means, how the guest argues for it, and what you (as a builder) should do about it on Monday morning.
 
 ![preview](preview.png)
 
 ## Install
 
-### Option 1 — Chrome / Edge / Brave extension (easiest)
+### Option 1 — Chrome Web Store (coming soon)
 
-1. Download or clone this repo
-2. Open `chrome://extensions/`
-3. Toggle **Developer mode** (top right)
-4. Click **Load unpacked** and select this folder
-5. Every new tab is now a daily builder quote
+Once the listing is approved, install with a single click. This page will link to it.
 
-### Option 2 — Web page (any browser)
+### Option 2 — Load unpacked (works today)
 
-1. Visit the hosted version: `https://<your-username>.github.io/builder-quotes/`
-2. Install a "New Tab Redirect" extension for your browser:
-   - Chrome: [New Tab Redirect](https://chrome.google.com/webstore/detail/new-tab-redirect/icpgjfneehieebagbmdbhnlpiopdcmna)
-   - Firefox: [New Tab Override](https://addons.mozilla.org/en-US/firefox/addon/new-tab-override/)
-3. Paste the URL above into the extension's settings
-
-### Option 3 — Local file
-
-Just open `index.html` in your browser. Bookmark it. Done.
+1. Click **Code → Download ZIP** above (or `git clone https://github.com/KellyGong0301/builder-quotes.git`)
+2. Unzip it to anywhere on your machine
+3. Open `chrome://extensions/` in Chrome / Edge / Brave
+4. Toggle **Developer mode** (top-right)
+5. Click **Load unpacked** and pick the unzipped folder
+6. Open a new tab — you should see today's builder quote
 
 ## Hide the Chrome footer (one-time, recommended)
 

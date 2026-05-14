@@ -169,6 +169,26 @@
   }
   .cards-small .card-name .arrow { font-size: 0.58rem; }
 
+  /* Single-card layout: centered, comfortable size — not too small, not too dominant */
+  .cards-solo {
+    grid-template-columns: 1fr;
+    max-width: 100%;
+  }
+  .cards-solo .card-cover { aspect-ratio: 16 / 9; margin-bottom: 1rem; }
+  .cards-solo .card-cover.typo { padding: 1.8rem 2rem; }
+  .cards-solo .card-cover.typo .typo-title { font-size: clamp(1.6rem, 3vw, 2.4rem); }
+  .cards-solo .card-cover.typo .typo-mark,
+  .cards-solo .card-cover.typo .typo-foot {
+    font-size: clamp(0.6rem, 0.78vw, 0.74rem);
+  }
+  .cards-solo .card-name {
+    font-size: clamp(1.05rem, 1.25vw, 1.2rem);
+  }
+  .cards-solo .card-tagline {
+    font-size: clamp(0.95rem, 1.1vw, 1.08rem);
+    line-height: 1.5;
+  }
+
   /* Cards — image-text */
   .cards {
     list-style: none;
@@ -342,7 +362,7 @@
     <a href="./index.html">Back to today's quote</a>
   </div>
 
-  <span class="wave" aria-hidden="true">🎆</span>
+  <span class="wave" aria-hidden="true">👋</span>
 
   <h1 class="headline">Hi, I'm Kelly. <em>Thanks for the thanks.</em></h1>
 
@@ -352,21 +372,12 @@
     <p>Lenny Rachitsky open-sourced 300+ transcripts of his podcast — interviews with people who built Airbnb, Stripe, Linear, Slack, ChatGPT, Cursor, and a few hundred more. Real operators explaining how they actually decide things. But the format is wrong for how I want to consume it: I don't want a 90-minute audio commitment, I want <em>one sharp line per day</em>.</p>
     <p>So I read all 300+ transcripts (well, I had AI agents read them), pulled out the punchiest quotes, and wrote a plain-English unpacking for each one. Now my new tab gives me one of these every morning, plus a <em>Read more</em> if I want the context.</p>
     <p>It's not a productivity tool. It's <em>environment design</em> — when my brain is about to default to a habit (open new tab → check something), it gets one good thought first.</p>
-    <p>If that resonates, the other small things I've made live in the same spirit.</p>
+    <p>If that resonates, here's another small thing I've made in the same spirit.</p>
   </section>
 
   <section class="small-things">
-    <div class="section-label">Other small things</div>
-    <ul class="cards cards-small">
-      <li>
-        <a class="card" href="https://github.com/KellyGong0301/frontend-post" target="_blank" rel="noopener noreferrer">
-          <div class="card-cover">
-            <img src="https://raw.githubusercontent.com/KellyGong0301/frontend-post/main/docs/preview/card_04.png" alt="frontend-post preview" loading="lazy">
-          </div>
-          <div class="card-name">frontend-post <span class="arrow">view →</span></div>
-          <div class="card-tagline">Turn any text into 小红书-style image carousels.</div>
-        </a>
-      </li>
+    <div class="section-label">Another small thing</div>
+    <ul class="cards cards-small cards-solo">
       <li>
         <a class="card" href="https://github.com/KellyGong0301/learn-something" target="_blank" rel="noopener noreferrer">
           <div class="card-cover typo">
@@ -375,7 +386,7 @@
             <span class="typo-foot">→ One short story, one quiet idea</span>
           </div>
           <div class="card-name">learn-something <span class="arrow">view →</span></div>
-          <div class="card-tagline">A tiny agent skill for idle moments.</div>
+          <div class="card-tagline">A tiny agent skill for idle moments — while a long command runs, it hands you one short story that teaches an obscure useful idea.</div>
         </a>
       </li>
     </ul>
